@@ -1,0 +1,22 @@
+{
+  "name": "woolly",
+  "version": "0.1.0",
+  "description": "A tool for building and using simple node.js backends",
+  "main": "index.js",
+  "author": "Allain Lalonde <allain.lalonde@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dynamic.io": "^0.0.3",
+    "jiff": "^0.7.3",
+    "socket.io-client": "^1.7.3"
+  },
+  "scripts": {
+    "format": "prettier-standard 'lib/**/*.js' 'test/**/*.js' index.js",
+    "test": "tape test/*.js"
+  },
+  "devDependencies": {
+    "express": "^4.15.2",
+    "prettier-standard": "^4.1.0",
+    "tape": "^4.6.3"
+  }
+}
