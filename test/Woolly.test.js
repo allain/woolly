@@ -54,17 +54,17 @@ test('Woolly - handlers pass params to their view and actions', t => {
   let w = WoollyServer(server)
 
   let client = WoollyClient('http://localhost:3000/foo/bar', state => {
-    t.deepEqual(state, { param1: 'foo', param2: 'bar' })
+    t.deepEqual(state, {param1: 'foo', param2: 'bar'})
   })
 
   let result = w.handler('/:param1/:param2', params => params, {
     check: params => {
-      t.deepEqual(params, { param1: 'foo', param2: 'bar', x: 10 })
+      t.deepEqual(params, {param1: 'foo', param2: 'bar', x: 10})
       tearDown(client, server, t.end)
     }
   })
 
-  client.do('check', { x: 10 })
+  client.do('check', {x: 10})
 })
 
 test('Woolly - active server can be connected to', t => {
