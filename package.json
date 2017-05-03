@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "Allain Lalonde <allain.lalonde@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allain/woolly.git"
+  },
   "dependencies": {
     "dynamic.io": "^0.0.3",
     "jiff": "^0.7.3",
