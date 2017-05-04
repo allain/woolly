@@ -10,6 +10,7 @@
     "url": "https://github.com/allain/woolly.git"
   },
   "dependencies": {
+    "debug": "^2.6.6",
     "dynamic.io": "^0.0.3",
     "jiff": "^0.7.3",
     "socket.io-client": "^1.7.3"
