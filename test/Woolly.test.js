@@ -54,17 +54,17 @@ test('Woolly - handlers pass params to their view and actions', t => {
   let w = WoollyServer(server)
 
   let client = WoollyClient('http://localhost:3000/foo/bar', state => {
-    t.deepEqual(state, {param1: 'foo', param2: 'bar'})
+    t.deepEqual(state, { param1: 'foo', param2: 'bar' })
   })
 
   let result = w.handler('/:param1/:param2', params => params, {
     check: params => {
-      t.deepEqual(params, {param1: 'foo', param2: 'bar', x: 10})
+      t.deepEqual(params, { param1: 'foo', param2: 'bar', x: 10 })
       tearDown(client, server, t.end)
     }
   })
 
-  client.do('check', {x: 10})
+  client.do('check', { x: 10 })
 })
 
 test('Woolly - active server can be connected to', t => {
@@ -79,6 +79,29 @@ test('Woolly - active server can be connected to', t => {
     t.deepEqual(state, 'A', 'received correct state in change callback')
     tearDown(client, server, t.end)
   })
+})
+
+test('Woolly - handler can be configured using an object', t => {
+  const app = require('express')()
+  const server = app.listen(3000)
+
+  let w = WoollyServer(server)
+
+  let count = 0
+  let result = w.handler({
+    route: '/test',
+    getState: () => count,
+    actions: {
+      tick: () => ++count
+    }
+  })
+
+  let calls = 0
+  let client = WoollyClient('http://localhost:3000/test/', state => {
+    t.deepEqual(state, [0, 1][calls++], 'expected state content')
+    if (calls === 2) t.end()
+  })
+  client.do('tick')
 })
 
 function tearDown (client, server, cb) {
