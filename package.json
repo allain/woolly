@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "debug": "^2.6.6",
+    "dffptch": "^1.0.4",
     "dynamic.io": "^0.0.3",
-    "jiff": "^0.7.3",
     "socket.io-client": "^1.7.3"
   },
   "scripts": {
