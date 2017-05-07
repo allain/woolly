@@ -53,17 +53,19 @@ test('Woolly - handlers pass params to getState and actions', t => {
   let w = WoollyServer(server)
 
   let client = WoollyClient('http://localhost:3000/foo/bar', state => {
-    t.deepEqual(state, {param1: 'foo', param2: 'bar'})
+    t.deepEqual(state, { param1: 'foo', param2: 'bar' })
   })
 
   w.handler('/:param1/:param2', params => params, {
     check: params => {
-      t.deepEqual(params, {param1: 'foo', param2: 'bar', x: 10})
+      t.deepEqual(params, { param1: 'foo', param2: 'bar', x: 10 })
       tearDown(client, server, t.end)
     }
   })
 
-  client.do('check', {x: 10}).catch(t.end)
+  client.on('ready', () => {
+    client.actions.check({ x: 10 }).catch(t.end)
+  })
 })
 
 test('Woolly - active server can be connected to', t => {
@@ -168,7 +170,7 @@ test('Woolly - client emits ready event after initialized', t => {
 
   let calls = 0
   let client = WoollyClient('http://localhost:3000/count', state => {})
-  client.on('ready', ({state, actions}) => {
+  client.on('ready', ({ state, actions }) => {
     t.deepEqual(state, 0, 'on ready passes in state')
     t.deepEqual(
       Object.keys(actions),

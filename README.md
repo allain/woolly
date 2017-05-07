@@ -1,6 +1,6 @@
 # woolly
 
-Woolly is a tool that simplifes the sharing of state across clients.
+A tool for building and using simple node.js backends.
 
 The basic idea comes from an observation that most of the screens I write in my apps can be broken down into:
 
@@ -45,7 +45,7 @@ const client = WoollyClient('/topics/testing', (messages) => {
   console.log('topic messages:', messages)
 })
 
-client.do('addMessage', {text: `Tick ${new Date()}`})
+client.actions.addMessage({text: `Tick ${new Date()}`})
 ```
 
 ## WoollyServer
@@ -60,13 +60,16 @@ Returns a WoollyServer attached to the HTTP server.
 
 Makes a resource available at the given `route`. When a client connects to it, they start receiving its current state as determined by calling `getState()`
 
-`actions` is a map of action names to handler functions. After  an action is completed, the state is considered updated, and all connected clients will receive a new state.
+`actions` is a map of action names to handler functions. After  an action is completed, the state is considered updated, and all connected clients will receive the  new state.
 
 #### WoollyClient(uri, onChange) : WoollyClient
 Generates a WoollyClient and connects it to the uri provided. When a state change occurs, the onChange handler will be called.
 
-#### WoollyClient.do(action, params = {})
+#### WoollyClient.do(action, params = {}) : Promise
 Sends a request for the server to perform the action with the provided params (if any)
+
+#### WoollyClient.actions.ACTION_NAME(params = {}) : Promise
+Each action defined in the server is available by name here and can be invoked.
 
 #### WoollyClient.disconnect()
 Disconnects the client from the WoollyServer
