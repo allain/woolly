@@ -1,6 +1,6 @@
 {
   "name": "woolly",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A tool for building and using simple node.js backends",
   "main": "index.js",
   "author": "Allain Lalonde <allain.lalonde@gmail.com>",
