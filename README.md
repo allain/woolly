@@ -71,5 +71,8 @@ Sends a request for the server to perform the action with the provided params (i
 #### WoollyClient.actions.ACTION_NAME(params = {}) : Promise
 Each action defined in the server is available by name here and can be invoked.
 
+#### WoollyClient.on(event:string, callback:function)
+Allows clients to register for the events 'ready', 'connected', 'disconnected', and 'error'. Until the ready event is fired, the actions map will be empty.
+
 #### WoollyClient.disconnect()
 Disconnects the client from the WoollyServer
