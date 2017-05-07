@@ -13,7 +13,8 @@
     "debug": "^2.6.6",
     "dffptch": "^1.0.4",
     "dynamic.io": "^0.0.3",
-    "socket.io-client": "^1.7.3"
+    "socket.io-client": "^1.7.3",
+    "tiny-emitter": "^2.0.0"
   },
   "scripts": {
     "format": "prettier-standard 'lib/**/*.js' 'test/**/*.js' index.js",

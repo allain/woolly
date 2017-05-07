@@ -6,9 +6,13 @@ const WoollyServer = require('..').WoollyServer
 const WoollyClient = require('..').WoollyClient
 
 const tearDown = (client, server, cb) => {
-  client.disconnect(
-    err => (err ? cb(err) : setTimeout(() => server.close(cb), 50))
-  )
+  client.disconnect(err => {
+    if (err) return cb(err)
+
+    if (!server) return cb()
+
+    setTimeout(() => server.close(cb), 50)
+  })
 }
 
 const buildCountingHandler = (count = 0) => ({
@@ -42,23 +46,7 @@ test('Woolly - registering a handler is doable', t => {
   server.close(t.end)
 })
 
-test('Woolly - actions sent to server get processed', t => {
-  const app = require('express')()
-  const server = app.listen(3000)
-
-  let w = WoollyServer(server)
-  w.handler(buildCountingHandler())
-
-  let calls = 0
-  let client = WoollyClient('http://localhost:3000/count/', state => {
-    t.equal(state, [0, 1][calls++], 'expected change content')
-    if (calls === 2) tearDown(client, server, t.end)
-  })
-
-  client.do('inc')
-})
-
-test('Woolly - handlers pass params to their view and actions', t => {
+test('Woolly - handlers pass params to getState and actions', t => {
   const app = require('express')()
   const server = app.listen(3000)
 
@@ -68,14 +56,14 @@ test('Woolly - handlers pass params to their view and actions', t => {
     t.deepEqual(state, {param1: 'foo', param2: 'bar'})
   })
 
-  let result = w.handler('/:param1/:param2', params => params, {
+  w.handler('/:param1/:param2', params => params, {
     check: params => {
       t.deepEqual(params, {param1: 'foo', param2: 'bar', x: 10})
       tearDown(client, server, t.end)
     }
   })
 
-  client.do('check', {x: 10})
+  client.do('check', {x: 10}).catch(t.end)
 })
 
 test('Woolly - active server can be connected to', t => {
@@ -152,5 +140,46 @@ test('Woolly - actions can reject', t => {
     t.ok(err instanceof Error)
     t.equal(err.message, 'what!?', 'message on error should be passed through')
     tearDown(client, server, t.end)
+  })
+})
+
+test('WoollyClient - client has event emitter ducktype', t => {
+  let client = WoollyClient('http://localhost:3000/test/', state => {})
+  t.equal(typeof client.on, 'function', 'has on method')
+  t.equal(typeof client.once, 'function', 'has emit method')
+  t.equal(typeof client.off, 'function', 'has off method')
+  t.equal(typeof client.emit, 'function', 'has emit method')
+  t.end()
+})
+
+test('WoollyClient - emits error event when unable to connect', t => {
+  let client = WoollyClient('http://localhost:3000/test/', state => {})
+  client.on('error', err => {
+    t.ok(err instanceof Error, 'error is an instanceof an Error')
+    tearDown(client, null, t.end)
+  })
+})
+
+test('Woolly - client emits ready event after initialized', t => {
+  const app = require('express')()
+  const server = app.listen(3000)
+
+  let w = WoollyServer(server).handler(buildCountingHandler())
+
+  let calls = 0
+  let client = WoollyClient('http://localhost:3000/count', state => {})
+  client.on('ready', ({state, actions}) => {
+    t.deepEqual(state, 0, 'on ready passes in state')
+    t.deepEqual(
+      Object.keys(actions),
+      ['inc'],
+      'on ready receives actions array'
+    )
+    t.equal(
+      typeof actions.inc,
+      'function',
+      'exposed actions should be functions'
+    )
+    t.end()
   })
 })
