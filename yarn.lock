@@ -1131,6 +1131,10 @@ jest-validate@19.0.0:
     leven "^2.0.0"
     pretty-format "^19.0.0"
 
+jiff@^0.7.3:
+  version "0.7.3"
+  resolved "http://npmjs.favequest.net:4873/jiff/-/jiff-0.7.3.tgz#42db5d9140f1804399bb501747055a9434f40f46"
+
 js-tokens@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.1.tgz#08e9f132484a2c45a30907e9dc4d5567b7f114d7"
@@ -1155,16 +1159,6 @@ json3@3.2.6:
 json3@3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/json3/-/json3-3.3.2.tgz#3c0434743df93e2f5c42aee7b19bcb483575f4e1"
-
-json8-merge-patch@^1.0.0:
-  version "1.0.0"
-  resolved "http://npmjs.favequest.net:4873/json8-merge-patch/-/json8-merge-patch-1.0.0.tgz#54cf0ec4b7611f3f991dc61a0bb8c35159e3c7ca"
-  dependencies:
-    json8 "^0.9.0"
-
-json8@^0.9.0:
-  version "0.9.2"
-  resolved "http://npmjs.favequest.net:4873/json8/-/json8-0.9.2.tgz#dced62a24c8ed457702d45c71068081925c3011f"
 
 jsonify@~0.0.0:
   version "0.0.0"
