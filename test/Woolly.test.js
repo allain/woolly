@@ -182,6 +182,37 @@ test('Woolly - client emits ready event after initialized', t => {
       'function',
       'exposed actions should be functions'
     )
-    t.end()
+    tearDown(client, server, t.end)
   })
+
 })
+
+test('Woolly - receives complete state when connected', async t => {
+  const app = require('express')()
+  const server = app.listen(3000)
+
+  let w = WoollyServer(server).handler(buildCountingHandler())
+
+  let client = WoollyClient('http://localhost:3000/count', state => {})
+  client.on('ready', async ({ state, actions }) => {
+    await actions.inc()
+    await actions.inc()
+
+    client.disconnect(() => connectClient2())
+  })
+
+  async function connectClient2() {
+    let client2 = WoollyClient('http://localhost:3000/count', state => {
+      t.equals(state, 2, 'constructor callback should be 2 in client 2')
+    })
+
+    client2.on('ready', async ({ state, actions }) => {
+      t.equals(state, 2, 'ready state is not 2 for client 2?')
+
+      setTimeout(() => {
+        tearDown(client2, server, t.end())
+      }, 500)
+    })
+  }
+})
+
