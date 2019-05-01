@@ -17,12 +17,10 @@
     "tiny-emitter": "^2.0.0"
   },
   "scripts": {
-    "format": "prettier-standard 'lib/**/*.js' 'test/**/*.js' index.js",
-    "test": "tape test/*.js"
+    "test": "jest --runInBand"
   },
   "devDependencies": {
     "express": "^4.15.2",
-    "prettier-standard": "^4.1.0",
-    "tape": "^4.6.3"
+    "jest": "^24.7.1"
   }
 }
